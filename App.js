@@ -1,16 +1,24 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, ImageBackground } from 'react-native';
 import { Notification, Receipt21, Clock, Message } from 'iconsax-react-native';
-import { fontType, colors } from './src/assets/themes';
+import { fontType, colors } from './src/themes';
 export default function App() {
   return (
+    
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>HomeFitt</Text>
-        <Notification color={colors.black()} variant="Linear" size={24} />
-      </View>
-      <ListBlog />
+  <View style={styles.header}>
+    <View style={styles.headerContent}>
+      <Image
+        source={require('./src/assets/gambar/LogoHF.png')}
+        style={styles.logo}
+      />
+      <Text style={styles.title}>HomeFitt</Text>
     </View>
+    <Notification color={colors.black()} variant="Linear" size={24} />
+  </View>
+  <ListBlog />
+</View>
+    
   );
 }
 const styles = StyleSheet.create({
@@ -33,16 +41,25 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white(),
   },
   header: {
-    paddingHorizontal: 24,
-    justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    height: 52,
-    elevation: 8,
-    paddingTop: 8,
-    paddingBottom: 4
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logo: {
+      width: 30, 
+      height: 35,
+      marginRight: 5
   },
   title: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 5,
     fontSize: 20,
     fontFamily: fontType['Pjs-ExtraBold'],
     color: colors.black(),
@@ -109,7 +126,7 @@ const ListBlog = () => {
                   <Text style={itemHorizontal.cardTitle}>
                     Seluruh Tubuh
                   </Text>
-                  <Text style={itemHorizontal.cardText}>Nov 10, 2023</Text>
+                  <Text style={itemHorizontal.cardText}>Tantangan 8 x 4</Text>
                 </View>
               </View>
             </ImageBackground>
@@ -127,7 +144,7 @@ const ListBlog = () => {
                   <Text style={itemHorizontal.cardTitle}>
                     Bagian Bawah
                   </Text>
-                  <Text style={itemHorizontal.cardText}>Nov 10, 2023</Text>
+                  <Text style={itemHorizontal.cardText}>Tantangan 8 x 4</Text>
                 </View>
                 <View>
                 </View>
@@ -147,7 +164,7 @@ const ListBlog = () => {
                   <Text style={itemHorizontal.cardTitle}>
                     Latihan Tangan
                   </Text>
-                  <Text style={itemHorizontal.cardText}>Nov 10, 2023</Text>
+                  <Text style={itemHorizontal.cardText}>Tantangan 8 x 4</Text>
                 </View>
               </View>
             </ImageBackground>
@@ -173,7 +190,7 @@ const ListBlog = () => {
                   <Text style={itemHorizontal.cardTitle}>
                     Seluruh Tubuh
                   </Text>
-                  <Text style={itemHorizontal.cardText}>Nov 10, 2023</Text>
+                  <Text style={itemHorizontal.cardText}>Tantangan 8 x 4</Text>
                 </View>
               </View>
             </ImageBackground>
@@ -191,7 +208,7 @@ const ListBlog = () => {
                   <Text style={itemHorizontal.cardTitle}>
                     Bagian Bawah
                   </Text>
-                  <Text style={itemHorizontal.cardText}>Nov 10, 2023</Text>
+                  <Text style={itemHorizontal.cardText}>Tantangan 8 x 4</Text>
                 </View>
               </View>
             </ImageBackground>
@@ -209,7 +226,7 @@ const ListBlog = () => {
                   <Text style={itemHorizontal.cardTitle}>
                     Latihan Tangan
                   </Text>
-                  <Text style={itemHorizontal.cardText}>Nov 10, 2023</Text>
+                  <Text style={itemHorizontal.cardText}>Tantangan 8 x 4</Text>
                 </View>
               </View>
             </ImageBackground>
@@ -235,7 +252,7 @@ const ListBlog = () => {
                   <Text style={itemHorizontal.cardTitle}>
                     Seluruh Tubuh
                   </Text>
-                  <Text style={itemHorizontal.cardText}>Nov 10, 2023</Text>
+                  <Text style={itemHorizontal.cardText}>Tantangan 8 x 4</Text>
                 </View>
               </View>
             </ImageBackground>
@@ -253,7 +270,7 @@ const ListBlog = () => {
                   <Text style={itemHorizontal.cardTitle}>
                     Bagian Bawah
                   </Text>
-                  <Text style={itemHorizontal.cardText}>Nov 10, 2023</Text>
+                  <Text style={itemHorizontal.cardText}>Tantangan 8 x 4</Text>
                 </View>
               </View>
             </ImageBackground>
@@ -271,12 +288,7 @@ const ListBlog = () => {
                   <Text style={itemHorizontal.cardTitle}>
                     Latihan Tangan
                   </Text>
-                  <Text style={itemHorizontal.cardText}>Nov 10, 2023</Text>
-                </View>
-                <View>
-                  <View style={itemHorizontal.cardIcon}>
-                    <Receipt21 color={colors.white()} variant="Linear" size={15} />
-                  </View>
+                  <Text style={itemHorizontal.cardText}>Tantangan 8 x 4</Text>
                 </View>
               </View>
             </ImageBackground>
@@ -370,7 +382,7 @@ const itemHorizontal = StyleSheet.create({
     color: colors.white(),
   },
   cardText: {
-    fontSize: 10,
+    fontSize: 14,
     color: colors.white(),
     fontFamily: fontType['Pjs-Medium'],
   },
@@ -382,3 +394,5 @@ const itemHorizontal = StyleSheet.create({
     borderRadius: 5,
   },
 });
+
+
