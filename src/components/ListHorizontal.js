@@ -1,37 +1,8 @@
-import {StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
-import {Receipt21} from 'iconsax-react-native';
-import FastImage from 'react-native-fast-image';
-import { fontType,colors } from '../themes';
-const ItemHorizontal = ({item, variant, onPress}) => {
-  return (
-    <View style={itemHorizontal.cardItem}>
-      <FastImage
-        style={itemHorizontal.cardImage}
-        source={{
-            uri: item.image,
-            headers: {Authorization: 'someAuthToken'},
-            priority: FastImage.priority.high,
-          }}
-          resizeMode={FastImage.resizeMode.cover}>
-        <View style={itemHorizontal.cardContent}>
-          <View style={itemHorizontal.cardInfo}>
-            <Text style={itemHorizontal.cardTitle}>{item.title}</Text>
-            <Text style={itemHorizontal.cardText}>{item.createdAt}</Text>
-          </View>
-          <View>
-            <View style={itemHorizontal.cardIcon}>
-              <TouchableOpacity onPress={onPress}>
-                <Receipt21 color={colors.white()} variant={variant} size={20} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </FastImage>
-    </View>
-  );
-};
-const ListHorizontal = ({data}) => {
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import { Receipt21 } from 'iconsax-react-native';
+import { fontType, colors } from '../themes';
+const ListHorizontal = ({ item }) => {
   const [bookmark, setBookmark] = useState([]);
   const toggleBookmark = itemId => {
     if (bookmark.includes(itemId)) {
@@ -40,37 +11,46 @@ const ListHorizontal = ({data}) => {
       setBookmark([...bookmark, itemId]);
     }
   };
-  const renderItem = ({item}) => {
-    variant = bookmark.includes(item.id) ? 'Bold' : 'Linear';
-    return (
-      <ItemHorizontal
-        item={item}
-        variant={variant}
-        onPress={() => toggleBookmark(item.id)}
-      />
-    );
-  };
   return (
-    <FlatList
-      data={data}
-      keyExtractor={item => item.id}
-      renderItem={item => renderItem({...item})}
-      ItemSeparatorComponent={() => <View style={{width: 15}} />}
-      contentContainerStyle={{paddingHorizontal: 24}}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-    />
+    <View style={{ ...itemHorizontal.cardItem, marginLeft: 24 }}>
+      <ImageBackground
+        style={itemHorizontal.cardImage}
+        resizeMode="cover"
+        imageStyle={{ borderRadius: 10 }}
+        source={{
+          uri: item.image,
+        }}>
+        <View style={itemHorizontal.cardContent}>
+          <View style={itemHorizontal.cardInfo}>
+            <Text style={itemHorizontal.cardTitle}>
+              {item.title}
+            </Text>
+            <Text style={itemHorizontal.cardText}>{item.description}</Text>
+          </View>
+          <View style={{position:'absolute', right: 0, top: 10}}>
+            <TouchableOpacity onPress={() => toggleBookmark(item.id)}>
+              <Receipt21 color='white' size={20} variant={bookmark.includes(item.id) ? 'Bold' : 'Linear'} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ImageBackground>
+    </View>
   );
 };
 export default ListHorizontal;
 const itemHorizontal = StyleSheet.create({
   cardItem: {
-    width: 280,
+    width: 265,
+  },
+  cardImageHeader: {
+    width: '117%',
+    height: 130,
+    borderRadius: 11,
   },
   cardImage: {
-    width: '100%',
-    height: 200,
-    borderRadius: 15,
+    width: '108%',
+    height: 130,
+    borderRadius: 5,
   },
   cardContent: {
     flexDirection: 'row',
@@ -78,18 +58,25 @@ const itemHorizontal = StyleSheet.create({
     padding: 15,
   },
   cardInfo: {
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     height: '100%',
-    gap: 10,
-    maxWidth: '60%',
+    gap: 50,
+    // maxWidth: '60%',
   },
   cardTitle: {
     fontFamily: fontType['Pjs-Bold'],
-    fontSize: 14,
+    fontSize: 20,
+    color: colors.white(),
+  },
+  cardHeader: {
+    fontFamily: fontType['Pjs-Bold'],
+    marginLeft: 10,
+    marginTop: 10,
+    fontSize: 22,
     color: colors.white(),
   },
   cardText: {
-    fontSize: 10,
+    fontSize: 14,
     color: colors.white(),
     fontFamily: fontType['Pjs-Medium'],
   },
