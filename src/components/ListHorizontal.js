@@ -1,8 +1,11 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import React, { useState } from 'react';
 import { Receipt21 } from 'iconsax-react-native';
 import { fontType, colors } from '../themes';
+import {useNavigation} from '@react-navigation/native';
+
 const ListHorizontal = ({ item }) => {
+  const navigation = useNavigation();
   const [bookmark, setBookmark] = useState([]);
   const toggleBookmark = itemId => {
     if (bookmark.includes(itemId)) {
@@ -12,7 +15,7 @@ const ListHorizontal = ({ item }) => {
     }
   };
   return (
-    <View style={{ ...itemHorizontal.cardItem, marginLeft: 24 }}>
+    <TouchableOpacity  style={{ ...itemHorizontal.cardItem, marginLeft: 24 }}onPress={() => navigation.navigate('BlogDetail', {blogId: item.id})}>
       <ImageBackground
         style={itemHorizontal.cardImage}
         resizeMode="cover"
@@ -34,7 +37,7 @@ const ListHorizontal = ({ item }) => {
           </View>
         </View>
       </ImageBackground>
-    </View>
+    </TouchableOpacity >
   );
 };
 export default ListHorizontal;

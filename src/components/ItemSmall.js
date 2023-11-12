@@ -3,10 +3,12 @@ import FastImage from 'react-native-fast-image';
 import {Receipt21, Clock, Message} from 'iconsax-react-native';
 import React from 'react';
 import { colors, fontType } from '../themes';
+import {useNavigation} from '@react-navigation/native';
 
 const ItemSmall = ({item}) => {
+  const navigation = useNavigation();
   return (
-    <View style={styles.cardItem}>
+    <TouchableOpacity style={styles.cardItem} onPress={() => navigation.navigate('BlogDetail', {blogId: item.id})}>
       <FastImage
         style={styles.cardImage}
         source={{
@@ -43,7 +45,7 @@ const ItemSmall = ({item}) => {
           <Text style={styles.cardText}>{item.totalComments}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity >
   );
 };
 
