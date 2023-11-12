@@ -1,9 +1,8 @@
-import {ScrollView, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import {Setting2} from 'iconsax-react-native';
+import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { ShieldTick, Logout, Setting2, Profile2User, Edit, Like1 } from 'iconsax-react-native';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
-import {ProfileData, BlogList} from '../../../data';
-import {ItemSmall} from '../../components';
+import { ProfileData } from '../../../data';
 import { fontType, colors } from '../../themes';
 
 const formatNumber = number => {
@@ -23,57 +22,116 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <Image
+            source={require('../../assets/gambar/LogoHF.png')}
+            style={styles.logo}
+          />
+          <Text style={styles.title}>HomeFitt</Text>
+        </View>
         <Setting2 color={colors.black()} variant="Linear" size={24} />
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingHorizontal: 24,
           gap: 10,
-          paddingVertical: 20,
+          // paddingVertical: 20,
         }}>
-        <View style={{gap: 15, alignItems: 'center'}}>
-          <FastImage
-            style={profile.pic}
-            source={{
-              uri: ProfileData.profilePict,
-              headers: {Authorization: 'someAuthToken'},
-              priority: FastImage.priority.high,
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-          <View style={{gap: 5, alignItems: 'center'}}>
-            <Text style={profile.name}>{ProfileData.name}</Text>
-            <Text style={profile.info}>
-              Member since {ProfileData.createdAt}
-            </Text>
+        <ImageBackground
+          resizeMode='cover'
+          source={{
+            uri: 'https://img.freepik.com/free-photo/low-angle-man-training-gym_23-2149517298.jpg?w=740&t=st=1697365388~exp=1697365988~hmac=af723ae396d31fb46e243c4ab84cd769de59dababd7a620e2455bb3f475ccad4',
+          }}
+          style={{ height: 200, }}>
+
+        </ImageBackground>
+        <View style={{ flex: 1, marginTop: -50, backgroundColor: 'white', borderRadius: 25 }}>
+
+          <View style={{ gap: 15, alignItems: 'center', marginHorizontal: 24 }}>
+            <View style={{alignItems: 'center', justifyContent: 'center', marginBottom: 40}}>
+              <FastImage
+                style={profile.pic}
+                source={{
+                  uri: ProfileData.profilePict,
+                  headers: { Authorization: 'someAuthToken' },
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
+            </View>
+            <View style={{ gap: 5, alignItems: 'center' }}>
+              <Text style={profile.name}>{ProfileData.name}</Text>
+            </View>
+            <TouchableOpacity style={profile.buttonEdit}>
+              <Text style={profile.buttonText}>Edit Profile</Text>
+            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: 30 }}>
+              <View style={{ flex: 1, alignItems: 'center', gap: 5, backgroundColor: '#63b9ff', padding: 10, borderRadius: 10 }}>
+                <Text style={profile.sum}>{ProfileData.Latihan}</Text>
+                <Text style={profile.tag}>Latihan</Text>
+              </View>
+              <View style={{ flex: 1, alignItems: 'center', gap: 5, backgroundColor: '#63b9ff', padding: 10, borderRadius: 10 }}>
+                <Text style={profile.sum}>
+                  {formatNumber(ProfileData.Kalori)}
+                </Text>
+                <Text style={profile.tag}>KKAL</Text>
+              </View>
+              <View style={{ flex: 1, alignItems: 'center', gap: 5, backgroundColor: '#63b9ff', padding: 10, borderRadius: 10 }}>
+                <Text style={profile.sum}>
+                  {formatNumber(ProfileData.menit)}
+                </Text>
+                <Text style={profile.tag}>Menit</Text>
+              </View>
+            </View>
           </View>
-          <View style={{flexDirection: 'row', gap: 20}}>
-            <View style={{alignItems: 'center', gap: 5}}>
-              <Text style={profile.sum}>{ProfileData.blogPosted}</Text>
-              <Text style={profile.tag}>Posted</Text>
-            </View>
-            <View style={{alignItems: 'center', gap: 5}}>
-              <Text style={profile.sum}>
-                {formatNumber(ProfileData.following)}
-              </Text>
-              <Text style={profile.tag}>Following</Text>
-            </View>
-            <View style={{alignItems: 'center', gap: 5}}>
-              <Text style={profile.sum}>
-                {formatNumber(ProfileData.follower)}
-              </Text>
-              <Text style={profile.tag}>Follower</Text>
-            </View>
-          </View>
-          <TouchableOpacity style={profile.buttonEdit}>
-            <Text style={profile.buttonText}>Edit Profile</Text>
-          </TouchableOpacity>
         </View>
-        <View style={{paddingVertical: 10, gap:10}}>
-          {BlogList.map((item, index) => (
-            <ItemSmall item={item} key={index} />
-          ))}
+        <View
+          style={{
+            alignItems: 'flex-start',
+            gap: 20,
+            flexDirection: 'column',
+            backgroundColor: '#f2f2f2',
+            borderRadius: 10,
+            padding: 10,
+            marginHorizontal: 24,
+            marginBottom: 20
+          }}>
+          <TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
+              <Profile2User color={'#30a2ff'} variant={'Bulk'} size={25} />
+              <Text style={profile.setting}>Gender</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
+              <Setting2 color={'#30a2ff'} variant={'Bulk'} size={25} />
+              <Text style={profile.setting}>Pengaturan Umum</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
+              <Edit color={'#30a2ff'} variant={'Bulk'} size={25} />
+              <Text style={profile.setting}>Pengaturan Latihan</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
+              <Like1 color={'#30a2ff'} variant={'Bulk'} size={25} />
+              <Text style={profile.setting}>Beri kami nilai</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
+              <ShieldTick color={'#30a2ff'} variant={'Bulk'} size={25} />
+              <Text style={profile.setting}>Privacy Policy</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
+              <Logout color={'#30a2ff'} variant={'Bulk'} size={25} />
+              <Text style={profile.setting}>Logout</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
@@ -87,14 +145,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white(),
   },
   header: {
-    paddingHorizontal: 24,
-    justifyContent: 'flex-end',
     flexDirection: 'row',
     alignItems: 'center',
-    height: 52,
-    elevation: 8,
-    paddingTop: 8,
-    paddingBottom: 4,
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  logo: {
+    width: 30,
+    height: 35,
+    marginRight: 5
   },
   title: {
     fontSize: 20,
@@ -103,27 +167,28 @@ const styles = StyleSheet.create({
   },
 });
 const profile = StyleSheet.create({
-  pic: {width: 100, height: 100, borderRadius: 15},
+  pic: { width: 100, height: 100, borderRadius: 50, position: 'absolute', zIndex: 2, },
   name: {
     color: colors.black(),
     fontSize: 20,
     fontFamily: fontType['Pjs-Bold'],
-    textTransform:'capitalize'
+    textTransform: 'capitalize'
   },
-  info: {
-    fontSize: 12,
-    fontFamily: fontType['Pjs-Regular'],
-    color: colors.grey(),
+  setting: {
+    color: colors.black(),
+    fontSize: 16,
+    fontFamily: fontType['Pjs-SemiBold'],
+    textTransform: 'capitalize'
   },
   sum: {
     fontSize: 16,
     fontFamily: fontType['Pjs-SemiBold'],
-    color: colors.black(),
+    color: colors.white(),
   },
   tag: {
     fontSize: 14,
     fontFamily: fontType['Pjs-Regular'],
-    color: colors.grey(0.5),
+    color: colors.white,
   },
   buttonEdit: {
     paddingHorizontal: 16,

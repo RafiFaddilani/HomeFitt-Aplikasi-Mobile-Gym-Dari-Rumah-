@@ -1,4 +1,4 @@
 import Home from "./Home";
-import Bookmark from "./Bookmark";
+import Discover from "./Discover";
 import Profile from "./Profile";
-export {Home, Bookmark, Profile}
+export {Home, Discover, Profile}
