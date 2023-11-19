@@ -6,7 +6,7 @@ import { ListHorizontal } from '../../components';
 import { fontType, colors } from '../../themes';
 import ListDaily from '../../components/ListDaily';
 
-const Bookmark = () => {
+const Discover = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -40,7 +40,7 @@ const Bookmark = () => {
     </View>
   );
 };
-export default Bookmark;
+export default Discover;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

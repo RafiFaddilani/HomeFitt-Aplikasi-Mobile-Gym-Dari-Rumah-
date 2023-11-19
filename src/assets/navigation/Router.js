@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Home, Discover, Profile, BlogDetail} from '../../screens';
-import {Home2, LocationDiscover, ProfileCircle} from 'iconsax-react-native'; 
+import { Home3, ProfileCircle, SearchNormal} from 'iconsax-react-native'; 
 import { fontType, colors } from '../../themes';
 
 const Tab = createBottomTabNavigator();
@@ -31,7 +31,7 @@ function MainApp() {
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({focused, color}) => (
-            <Home2
+            <Home3
               color={color}
               variant={focused ? 'Bold' : 'Linear'}
               size={24}
@@ -46,9 +46,9 @@ function MainApp() {
         options={{
           tabBarLabel: 'Discover',
           tabBarIcon: ({focused, color}) => (
-            <LocationDiscover
+            <SearchNormal
               color={color}
-              variant={focused ? 'Bold' : 'Linear'}
+              variant={focused ? 'Outline' : 'Linear'}
               size={24}
             />
           ),

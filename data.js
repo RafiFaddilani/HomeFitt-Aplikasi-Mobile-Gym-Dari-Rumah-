@@ -77,7 +77,9 @@ export const BlogList = [
     exercise: '11',
     image:
       'https://img.freepik.com/free-photo/man-fitness-workout-shirtless-man-doing-stretching-home_144627-25355.jpg?w=740&t=st=1697364749~exp=1697365349~hmac=78d2156c0a476babe3052d0234e6fd1988e86096b7c8ee49d73aee4eb61891d4',
-    content: `Gerakan gym seluruh tubuh adalah jenis latihan yang dirancang untuk melibatkan dan melatih beberapa kelompok otot di seluruh tubuh dalam satu sesi latihan. Tujuannya adalah untuk meningkatkan kekuatan, daya tahan, dan kebugaran secara keseluruhan.`,
+    content: `Gerakan gym seluruh tubuh adalah serangkaian latihan fisik yang dirancang untuk melibatkan dan memperkuat berbagai kelompok otot di seluruh tubuh. Gerakan ini dapat mencakup latihan resistensi, kardiovaskular, dan latihan kekuatan yang menyasar berbagai bagian tubuh, mulai dari kaki, pinggang, punggung, dada, bahu, hingga lengan.
+    
+Latihan seluruh tubuh di gym sering kali melibatkan variasi gerakan seperti squat, deadlift, lunges, push-up, pull-up, plank, serta berbagai jenis angkat beban seperti barbel, dumbel, dan mesin resistensi. Jenis latihan ini memungkinkan pemfokusan pada berbagai kelompok otot, termasuk otot inti (core muscles) yang memperkuat bagian tengah tubuh.`,
   },
   {
     id: 2,
@@ -88,7 +90,9 @@ export const BlogList = [
     exercise: '12',
     image:
     'https://img.freepik.com/free-photo/low-angle-man-training-gym_23-2149517298.jpg?w=740&t=st=1697365388~exp=1697365988~hmac=af723ae396d31fb46e243c4ab84cd769de59dababd7a620e2455bb3f475ccad4',
-    content: `Latihan di bagian tubuh bawah (lower body) di gym merupakan bagian penting dari rutinitas kebugaran karena melibatkan otot-otot besar di area kaki, panggul, dan bokong. Fokus pada latihan tubuh bawah tidak hanya membantu membangun kekuatan dan daya tahan di bagian bawah tubuh, tetapi juga dapat meningkatkan keseimbangan, postur tubuh, dan mobilitas. `,
+    content: `Latihan di bagian tubuh bawah (lower body) di gym merupakan bagian penting dari rutinitas kebugaran. Gerakan gym untuk bagian bawah tubuh adalah serangkaian latihan yang bertujuan untuk memperkuat dan membentuk otot-otot di bagian kaki, panggul, dan pinggul. 
+    
+Fokus utamanya adalah pada otot-otot seperti quadriceps (otot paha depan), hamstring (otot belakang paha), gluteus (otot pantat), serta otot-otot di sekitar perut bawah dan kaki. `,
   },
   {
     id: 3,
@@ -99,7 +103,8 @@ export const BlogList = [
     exercise: '10',
     image:
     'https://img.freepik.com/free-photo/shirtless-bodybuilder-posing-gym_7502-4748.jpg?w=740&t=st=1697365544~exp=1697366144~hmac=256bd3b2d54c45609e8ff756e5a81f9255952d5fabb28689470643a9b911b38f',
-    content: `Latihan di bagian lengan di gym adalah program kebugaran yang bertujuan untuk memperkuat dan membentuk otot-otot di area lengan, termasuk bahu, trisep, dan bisep. Fokus pada latihan lengan yaitu membantu membentuk definisi otot dan meningkatkan fungsi sehari-hari seperti mengangkat beban atau melakukan tugas yang melibatkan gerakan lengan. `,
+    content: `Gerakan gym untuk bagian lengan adalah serangkaian latihan yang difokuskan pada memperkuat, membentuk, dan meningkatkan kekuatan serta ketahanan otot-otot di daerah bahu, lengan atas, dan lengan bawah. Latihan ini beragam dan dapat dilakukan menggunakan berbagai peralatan seperti barbel, dumbel, kabel, atau bahkan hanya menggunakan berat tubuh sendiri. Tujuannya adalah untuk mengembangkan otot-otot yang terlibat dalam gerakan dan aktivitas sehari-hari yang melibatkan lengan.
+     `,
   },
 ];
 export const ProfileData = {

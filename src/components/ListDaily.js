@@ -8,9 +8,10 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { fontType, colors } from '../themes';
-import { BeginnerrList } from '../../data';
+
 const ItemDiscover = ({ item, variant, onPress }) => {
   return (
+    <TouchableOpacity>
     <View style={itemHorizontal.listCard}>
       <View style={itemHorizontal.cardItem1}>
         <Image style={itemHorizontal.cardImage} source={{ uri: item.image }} />
@@ -20,6 +21,7 @@ const ItemDiscover = ({ item, variant, onPress }) => {
         <Text style={itemHorizontal.cardTitle}>{item.description}</Text>
       </View>
     </View>
+    </TouchableOpacity>
   );
 };
 const ListToday = ({ data }) => {
