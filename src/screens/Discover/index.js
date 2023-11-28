@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Text, View, ScrollView, Image,TouchableWithoutFeedback } from 'react-native';
 import React from 'react';
 import { Flash, LampCharge, SearchNormal } from 'iconsax-react-native';
 import { BeginnerrList, DailyList, } from '../../../data';
@@ -7,8 +8,10 @@ import { fontType, colors } from '../../themes';
 import ListDaily from '../../components/ListDaily';
 
 const Discover = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate("SearchPage")}>
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <Image
@@ -19,6 +22,7 @@ const Discover = () => {
         </View>
         <SearchNormal color={colors.black()} variant="Linear" size={25} />
       </View>
+      </TouchableWithoutFeedback>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ gap: -5, paddingVertical: 10 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10 }}>

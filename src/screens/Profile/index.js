@@ -1,9 +1,11 @@
 import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
-import { ShieldTick, Logout, Setting2, Profile2User, Edit, Like1 } from 'iconsax-react-native';
+import { ShieldTick, Logout, Profile2User, Like1 } from 'iconsax-react-native';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
 import { ProfileData } from '../../../data';
 import { fontType, colors } from '../../themes';
+import { Setting2, Edit } from "iconsax-react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const formatNumber = number => {
   if (number >= 1000000000) {
@@ -19,6 +21,7 @@ const formatNumber = number => {
 };
 
 const Profile = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -29,7 +32,7 @@ const Profile = () => {
           />
           <Text style={styles.title}>HomeFitt</Text>
         </View>
-        <Setting2 color={colors.black()} variant="Linear" size={24} />
+       
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -62,7 +65,7 @@ const Profile = () => {
             <View style={{ gap: 5, alignItems: 'center' }}>
               <Text style={profile.name}>{ProfileData.name}</Text>
             </View>
-            <TouchableOpacity style={profile.buttonEdit}>
+            <TouchableOpacity style={profile.buttonEdit}onPress={() => navigation.navigate("AddBlog")}>
               <Text style={profile.buttonText}>Edit Profile</Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', gap: 30 }}>
@@ -104,18 +107,6 @@ const Profile = () => {
           </TouchableOpacity>
           <TouchableOpacity>
             <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-              <Setting2 color={'#30a2ff'} variant={'Bulk'} size={25} />
-              <Text style={profile.setting}>Pengaturan Umum</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-              <Edit color={'#30a2ff'} variant={'Bulk'} size={25} />
-              <Text style={profile.setting}>Pengaturan Latihan</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
               <Like1 color={'#30a2ff'} variant={'Bulk'} size={25} />
               <Text style={profile.setting}>Beri kami nilai</Text>
             </View>
@@ -134,6 +125,11 @@ const Profile = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      {/* <TouchableOpacity
+      style={styles.floatingButton}
+      onPress={() => navigation.navigate("AddBlog")}>
+      <Edit color={colors.white()} variant="Linear" size={20} />
+      </TouchableOpacity> */}
     </View>
   );
 };
@@ -164,6 +160,23 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: fontType['Pjs-ExtraBold'],
     color: colors.black(),
+  },
+  floatingButton: {
+    backgroundColor: '#63b9ff',
+    padding: 15,
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    borderRadius: 10,
+    shadowColor: colors.blue(),
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+
+    elevation: 8,
   },
 });
 const profile = StyleSheet.create({
