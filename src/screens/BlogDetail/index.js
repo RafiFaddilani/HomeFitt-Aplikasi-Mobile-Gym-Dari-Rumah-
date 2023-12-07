@@ -1,24 +1,74 @@
 import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {ArrowLeft, More, HuobiToken, Clock, Weight} from 'iconsax-react-native';
 import {useNavigation} from '@react-navigation/native';
 import {BlogList} from '../../../data';
 import FastImage from 'react-native-fast-image';
 import { fontType, colors } from '../../themes';
+import ActionSheet from 'react-native-actions-sheet';
+import axios from 'axios';
 
 const BlogDetail = ({route}) => {
+  const {blogId} = route.params;
+  const [setIconStates] = useState({
+    liked: {variant: 'Linear', color: colors.grey(0.6)},
+  });
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const actionSheetRef = useRef(null);
+
+  const openActionSheet = () => {
+    actionSheetRef.current?.show();
+  };
+
+  const closeActionSheet = () => {
+    actionSheetRef.current?.hide();
+  };
+
+  useEffect(() => {
+    getBlogById();
+  }, [blogId]);
+
+  const getBlogById = async () => {
+    try {
+      const response = await axios.get(
+        `https://656deec3bcc5618d3c24415f.mockapi.io/Post/${blogId}`,
+      );
+      setSelectedBlog(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const navigateEdit = () => {
+    closeActionSheet();
+    navigation.navigate('EditBlog', {blogId});
+  };
+  const handleDelete = async () => {
+    await axios
+      .delete(`https://656deec3bcc5618d3c24415f.mockapi.io/Post/${blogId}`)
+      .then(() => {
+        closeActionSheet();
+        navigation.navigate('Post');
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  const navigation = useNavigation();
   const scrollY = useRef(new Animated.Value(0)).current;
   const diffClampY = Animated.diffClamp(scrollY, 0, 52);
   const headerY = diffClampY.interpolate({
     inputRange: [0, 52],
     outputRange: [0, -52],
   });
-  const {blogId} = route.params;
-  const [setIconStates] = useState({
-    liked: {variant: 'Linear', color: colors.grey(0.6)},
+  const bottomBarY = diffClampY.interpolate({
+    inputRange: [0, 52],
+    outputRange: [0, 52],
   });
-  const selectedBlog = BlogList.find(blog => blog.id === blogId);
-  const navigation = useNavigation();
   const toggleIcon = iconName => {
     setIconStates(prevStates => ({
       ...prevStates,
@@ -33,20 +83,19 @@ const BlogDetail = ({route}) => {
   };
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.header, {transform:[{translateY:headerY}]}]}>
+      <Animated.View
+        style={[styles.header, {transform: [{translateY: headerY}]}]}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <ArrowLeft
-            color={colors.black(0.6)}
-            variant="Linear"
-            size={24}
-          />
+          <ArrowLeft color={colors.black(0.6)} variant="Linear" size={24} />
         </TouchableOpacity>
         <View style={{flexDirection: 'row', justifyContent: 'center', gap: 20}}>
+          <TouchableOpacity onPress={openActionSheet}>
           <More
             color={colors.black(0.6)}
             variant="Linear"
             style={{transform: [{rotate: '90deg'}]}}
           />
+          </TouchableOpacity>
         </View>
       </Animated.View>
       <Animated.ScrollView
@@ -63,49 +112,113 @@ const BlogDetail = ({route}) => {
         <FastImage
           style={styles.image}
           source={{
-            uri: selectedBlog.image,
+            uri: selectedBlog?.image,
             headers: {Authorization: 'someAuthToken'},
             priority: FastImage.priority.high,
           }}
-          resizeMode={FastImage.resizeMode.cover}>
-        </FastImage>
+          resizeMode={FastImage.resizeMode.cover}></FastImage>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginTop: 15,
+          }}></View>
+        <Text style={styles.title}>{selectedBlog?.title}</Text>
+        <Text style={styles.category}>{selectedBlog?.category}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            gap: 55,
+            marginTop: 15,
           }}>
+          <View style={styles.itemContainer}>
+            <View style={[styles.iconBackground, {backgroundColor: '#ffc9bd'}]}>
+              <HuobiToken color="#fc0703" variant="Bulk" size={24} />
+            </View>
+            <Text style={styles.info}> KKAL</Text>
+            <Text style={styles.info}>{selectedBlog?.kkal}</Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <View style={[styles.iconBackground, {backgroundColor: '#ffeccc'}]}>
+              <Clock color="#FFA500" variant="Linear" size={24} />
+            </View>
+            <Text style={styles.info}> Duration</Text>
+            <Text style={styles.info}>{selectedBlog?.duration}</Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <View style={[styles.iconBackground, {backgroundColor: '#ddffd6'}]}>
+              <Weight color="#23c700" variant="Bulk" size={24} />
+            </View>
+            <Text style={styles.info}> Exercise</Text>
+            <Text style={styles.info}>{selectedBlog?.exercise}</Text>
+          </View>
         </View>
-        <Text style={styles.title}>{selectedBlog.title}</Text>
-        <Text style={styles.category}>{selectedBlog.category}</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 55, marginTop: 15 }}>
-      <View style={styles.itemContainer}>
-        <View style={[styles.iconBackground, { backgroundColor: '#ffc9bd' }]}>
-          <HuobiToken color="#fc0703" variant="Bulk" size={24} />
-        </View>
-        <Text style={styles.info}> KKAL</Text>
-        <Text style={styles.info}>{selectedBlog.kkal}</Text>
-      </View>
-      <View style={styles.itemContainer}>
-        <View style={[styles.iconBackground, { backgroundColor: '#ffeccc' }]}>
-          <Clock color="#FFA500" variant="Linear" size={24} />
-        </View>
-        <Text style={styles.info}> Duration</Text>
-        <Text style={styles.info}>{selectedBlog.duration}</Text>
-      </View>
-      <View style={styles.itemContainer}>
-        <View style={[styles.iconBackground, { backgroundColor: '#ddffd6' }]}>
-          <Weight color="#23c700" variant="Bulk" size={24} />
-        </View>
-        <Text style={styles.info}> Exercise</Text>
-        <Text style={styles.info}>{selectedBlog.exercise}</Text>
-      </View>
-    </View>
-        <Text style={styles.content}>{selectedBlog.content}</Text>
+        <Text style={styles.content}>{selectedBlog?.content}</Text>
         <TouchableOpacity style={styles.buttonContainer}>
-        <Text style={styles.buttonText}>Start Now</Text>
-      </TouchableOpacity>
+          <Text style={styles.buttonText}>Start Now</Text>
+        </TouchableOpacity>
       </Animated.ScrollView>
+      <ActionSheet
+        ref={actionSheetRef}
+        containerStyle={{
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+        }}
+        indicatorStyle={{
+          width: 100,
+        }}
+        gestureEnabled={true}
+        defaultOverlayOpacity={0.3}>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 15,
+          }}
+          onPress={navigateEdit}>
+          <Text
+            style={{
+              fontFamily: fontType['Pjs-Medium'],
+              color: colors.black(),
+              fontSize: 18,
+            }}>
+            Edit
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 15,
+          }}
+          onPress={handleDelete}>
+          <Text
+            style={{
+              fontFamily: fontType['Pjs-Medium'],
+              color: colors.black(),
+              fontSize: 18,
+            }}>
+            Delete
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 15,
+          }}
+          onPress={closeActionSheet}>
+          <Text
+            style={{
+              fontFamily: fontType['Pjs-Medium'],
+              color: 'red',
+              fontSize: 18,
+            }}>
+            Cancel
+          </Text>
+        </TouchableOpacity>
+      </ActionSheet>
     </View>
   );
 };

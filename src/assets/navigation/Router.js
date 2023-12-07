@@ -1,8 +1,8 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Home, Discover, Profile, BlogDetail,Search,AddBlogForm} from '../../screens';
-import { Home3, ProfileCircle, SearchNormal} from 'iconsax-react-native'; 
+import {Home, Discover, Post, Profile, BlogDetail,Search,AddBlogForm, EditBlogForm} from '../../screens';
+import { Home3, HomeHashtag, PasswordCheck, ProfileCircle, SearchNormal} from 'iconsax-react-native'; 
 import { fontType, colors } from '../../themes';
 
 const Tab = createBottomTabNavigator();
@@ -56,6 +56,21 @@ function MainApp() {
         }}
       />
       <Tab.Screen
+        name="Post"
+        component={Post}
+        options={{
+          tabBarLabel: 'Post',
+          tabBarIcon: ({focused, color}) => (
+            <PasswordCheck
+              color={color}
+              variant={focused ? 'Bold' : 'Linear'}
+              size={24}
+            />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
@@ -86,11 +101,11 @@ const Router = () => {
         name="BlogDetail"
         component={BlogDetail}
         options={{
-          headerShown: false, 
+          headerShown: false,
           animationEnabled: true,
           animationTypeForReplace: 'pop',
           gestureEnabled: true,
-          gestureDirection : 'horizontal',
+          gestureDirection: 'horizontal',
           ...TransitionPresets.SlideFromRightIOS,
         }}
       />
@@ -110,7 +125,19 @@ const Router = () => {
           animationEnabled: true,
           animationTypeForReplace: 'pop',
           gestureEnabled: true,
-          gestureDirection : 'horizontal',
+          gestureDirection: 'horizontal',
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
+      <Stack.Screen
+        name="EditBlog"
+        component={EditBlogForm}
+        options={{
+          headerShown: false,
+          animationEnabled: true,
+          animationTypeForReplace: 'pop',
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
           ...TransitionPresets.SlideFromRightIOS,
         }}
       />

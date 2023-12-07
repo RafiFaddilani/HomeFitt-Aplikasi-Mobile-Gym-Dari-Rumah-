@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Receipt21, Clock, Message} from 'iconsax-react-native';
 import React from 'react';
