@@ -9,13 +9,15 @@ import {
   RefreshControl,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback,useEffect} from 'react';
+import FastImage from 'react-native-fast-image';
 import {Edit, LampCharge, SearchNormal} from 'iconsax-react-native';
 import {ItemPost, ItemSmall, ListHorizontal} from '../../components';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {fontType, colors} from '../../themes';
 import ListDaily from '../../components/ListDaily';
-import axios from 'axios';
+import firestore from '@react-native-firebase/firestore';
+
 
 const Post = () => {
 
@@ -23,31 +25,41 @@ const Post = () => {
   const [loading, setLoading] = useState(true);
   const [blogData, setBlogData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const getDataBlog = async () => {
-    try {
-      const response = await axios.get(
-        'https://656deec3bcc5618d3c24415f.mockapi.io/Post',
-      );
-      setBlogData(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('blog')
+      .onSnapshot(querySnapshot => {
+        const blogs = [];
+        querySnapshot.forEach(documentSnapshot => {
+          blogs.push({
+            ...documentSnapshot.data(),
+            id: documentSnapshot.id,
+          });
+        });
+        setBlogData(blogs);
+        setLoading(false);
+      });
+    return () => subscriber();
+  }, []);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
-      getDataBlog();
+      firestore()
+        .collection('blog')
+        .onSnapshot(querySnapshot => {
+          const blogs = [];
+          querySnapshot.forEach(documentSnapshot => {
+            blogs.push({
+              ...documentSnapshot.data(),
+              id: documentSnapshot.id,
+            });
+          });
+          setBlogData(blogs);
+        });
       setRefreshing(false);
     }, 1500);
   }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      getDataBlog();
-    }, []),
-  );
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
@@ -88,7 +100,7 @@ const Post = () => {
               <ActivityIndicator size={'large'} color={colors.blue()} />
             ) : (
               blogData.map((item, index) => (
-                <ItemSmall item={item} key={index} />
+                <ItemPost item={item} key={index} />
               ))
             )}
           </View>

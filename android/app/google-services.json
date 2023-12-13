@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "794032349753",
+    "project_id": "homefitt-939e5",
+    "storage_bucket": "homefitt-939e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794032349753:android:60329695ad6cb72ee223e8",
+        "android_client_info": {
+          "package_name": "com.homefitt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXcntlJWB6pmXJCyPkVYUXsC4OoKoFg9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Animated, ActivityIndicator} from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import {ArrowLeft, More, HuobiToken, Clock, Weight} from 'iconsax-react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -6,7 +6,10 @@ import {BlogList} from '../../../data';
 import FastImage from 'react-native-fast-image';
 import { fontType, colors } from '../../themes';
 import ActionSheet from 'react-native-actions-sheet';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import axios from 'axios';
+
 
 const BlogDetail = ({route}) => {
   const {blogId} = route.params;
@@ -15,47 +18,55 @@ const BlogDetail = ({route}) => {
   });
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const actionSheetRef = useRef(null);
-
   const openActionSheet = () => {
     actionSheetRef.current?.show();
   };
-
   const closeActionSheet = () => {
     actionSheetRef.current?.hide();
   };
-
   useEffect(() => {
-    getBlogById();
+    const subscriber = firestore()
+      .collection('blog')
+      .doc(blogId)
+      .onSnapshot(documentSnapshot => {
+        const blogData = documentSnapshot.data();
+        if (blogData) {
+          console.log('Blog data: ', blogData);
+          setSelectedBlog(blogData);
+        } else {
+          console.log(`Blog with ID ${blogId} not found.`);
+        }
+      });
+    setLoading(false);
+    return () => subscriber();
   }, [blogId]);
-
-  const getBlogById = async () => {
-    try {
-      const response = await axios.get(
-        `https://656deec3bcc5618d3c24415f.mockapi.io/Post/${blogId}`,
-      );
-      setSelectedBlog(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const navigateEdit = () => {
     closeActionSheet();
     navigation.navigate('EditBlog', {blogId});
   };
   const handleDelete = async () => {
-    await axios
-      .delete(`https://656deec3bcc5618d3c24415f.mockapi.io/Post/${blogId}`)
-      .then(() => {
-        closeActionSheet();
-        navigation.navigate('Post');
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    setLoading(true);
+    try {
+      await firestore()
+        .collection('blog')
+        .doc(blogId)
+        .delete()
+        .then(() => {
+          console.log('Blog deleted!');
+        });
+      if (selectedBlog?.image) {
+        const imageRef = storage().refFromURL(selectedBlog?.image);
+        await imageRef.delete();
+      }
+      console.log('Blog deleted!');
+      closeActionSheet();
+      setSelectedBlog(null);
+      setLoading(false)
+      navigation.navigate('Profile');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const navigation = useNavigation();
