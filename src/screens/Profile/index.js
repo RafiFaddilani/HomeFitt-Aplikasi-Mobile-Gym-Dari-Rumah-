@@ -1,11 +1,15 @@
-import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, ImageBackground, ActivityIndicator, RefreshControl } from 'react-native';
 import { ShieldTick, Logout, Profile2User, Like1 } from 'iconsax-react-native';
-import React from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import FastImage from 'react-native-fast-image';
 import { ProfileData } from '../../../data';
 import { fontType, colors } from '../../themes';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Setting2, Edit } from "iconsax-react-native";
 import { useNavigation } from "@react-navigation/native";
+import ActionSheet from 'react-native-actions-sheet';
+import auth from '@react-native-firebase/auth';
 
 const formatNumber = number => {
   if (number >= 1000000000) {
@@ -22,6 +26,99 @@ const formatNumber = number => {
 
 const Profile = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true);
+  const [blogData, setBlogData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [profileData, setProfileData] = useState(null);
+  const actionSheetRef = useRef(null);
+  const openActionSheet = () => {
+    actionSheetRef.current?.show();
+  };
+  const closeActionSheet = () => {
+    actionSheetRef.current?.hide();
+  };
+  useEffect(() => {
+    const user = auth().currentUser;
+    const fetchBlogData = () => {
+      try {
+        if (user) {
+          const userId = user.uid;
+          const blogCollection = firestore().collection('blog');
+          const query = blogCollection.where('authorId', '==', userId);
+          const unsubscribeBlog = query.onSnapshot(querySnapshot => {
+            const blogs = querySnapshot.docs.map(doc => ({
+              ...doc.data(),
+              id: doc.id,
+            }));
+            setBlogData(blogs);
+            setLoading(false);
+          });
+
+          return () => {
+            unsubscribeBlog();
+          };
+        }
+      } catch (error) {
+        console.error('Error fetching blog data:', error);
+      }
+    };
+
+    const fetchProfileData = () => {
+      try {
+        const user = auth().currentUser;
+        if (user) {
+          const userId = user.uid;
+          const userRef = firestore().collection('users').doc(userId);
+
+          const unsubscribeProfile = userRef.onSnapshot(doc => {
+            if (doc.exists) {
+              const userData = doc.data();
+              setProfileData(userData);
+              fetchBlogData();
+            } else {
+              console.error('Dokumen pengguna tidak ditemukan.');
+            }
+          });
+
+          return () => {
+            unsubscribeProfile();
+          };
+        }
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+      }
+    };
+    fetchBlogData();
+    fetchProfileData();
+  }, []);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      firestore()
+        .collection('blog')
+        .onSnapshot(querySnapshot => {
+          const blogs = [];
+          querySnapshot.forEach(documentSnapshot => {
+            blogs.push({
+              ...documentSnapshot.data(),
+              id: documentSnapshot.id,
+            });
+          });
+          setBlogData(blogs);
+        });
+      setRefreshing(false);
+    }, 1500);
+  }, []);
+  const handleLogout = async () => {
+    try {
+      closeActionSheet();
+      await auth().signOut();
+      await AsyncStorage.removeItem('userData');
+      navigation.replace('Login');
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -117,7 +214,7 @@ const Profile = () => {
               <Text style={profile.setting}>Privacy Policy</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={openActionSheet}>
             <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
               <Logout color={'#30a2ff'} variant={'Bulk'} size={25} />
               <Text style={profile.setting}>Logout</Text>
@@ -125,11 +222,50 @@ const Profile = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      {/* <TouchableOpacity
-      style={styles.floatingButton}
-      onPress={() => navigation.navigate("AddBlog")}>
-      <Edit color={colors.white()} variant="Linear" size={20} />
-      </TouchableOpacity> */}
+      <ActionSheet
+        ref={actionSheetRef}
+        containerStyle={{
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+        }}
+        indicatorStyle={{
+          width: 100,
+        }}
+        gestureEnabled={true}
+        defaultOverlayOpacity={0.3}>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 15,
+          }}
+          onPress={handleLogout}>
+          <Text
+            style={{
+              fontFamily: fontType['Pjs-Medium'],
+              color: colors.black(),
+              fontSize: 18,
+            }}>
+            Log out
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 15,
+          }}
+          onPress={closeActionSheet}>
+          <Text
+            style={{
+              fontFamily: fontType['Pjs-Medium'],
+              color: 'red',
+              fontSize: 18,
+            }}>
+            Cancel
+          </Text>
+        </TouchableOpacity>
+      </ActionSheet>
     </View>
   );
 };

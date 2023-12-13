@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {ArrowLeft, AddSquare, Add} from 'iconsax-react-native';
 import FastImage from 'react-native-fast-image';
@@ -15,6 +16,7 @@ import {fontType, colors} from '../../themes';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const AddBlogForm = () => {
   const handleImagePick = async () => {
@@ -40,6 +42,7 @@ const AddBlogForm = () => {
 
     setLoading(true);
     try {
+      const authorId = auth().currentUser.uid;
       await reference.putFile(image);
       const url = await reference.getDownloadURL();
       await firestore().collection('blog').add({
@@ -47,6 +50,7 @@ const AddBlogForm = () => {
           category: blogData.category,
           deskripsi: blogData.deskripsi,
           image:url,
+          authorId
       });
       setLoading(false);
       console.log('Blog added!');
@@ -70,6 +74,10 @@ const AddBlogForm = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   return (
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      enabled>
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -184,6 +192,7 @@ const AddBlogForm = () => {
         </TouchableOpacity>
       </View>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 

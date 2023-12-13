@@ -63,7 +63,7 @@ const BlogDetail = ({route}) => {
       closeActionSheet();
       setSelectedBlog(null);
       setLoading(false)
-      navigation.navigate('Profile');
+      navigation.navigate('Post');
     } catch (error) {
       console.error(error);
     }
